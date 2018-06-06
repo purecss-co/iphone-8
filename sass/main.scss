@@ -1,0 +1,293 @@
+// colors
+$bg-color: #333740;
+$iphone8-color: #e2e3e4;
+$iphone8-color-dark: darken($iphone8-color, 10%);
+$bazzel-color: #fff;
+$charger-color: #e6e7e9;
+$charger-inside-color: #cccacd;
+$charger-border-color: #bfc0c4;
+$charger-line-color: #a9aaae;
+$wire-shadow-color: #a7a6ab;
+$black-color: #000;
+$screen-color: #333230;
+$screen-border-color: #222;
+$battery-color: #4cda64;
+$header-color: #666;
+
+// sizes
+$body-padding: 1%;
+$iphone8-height: 698px;
+$iphone8-width: 336px;
+$iphone8-margin: -50px;
+$bazzel-height: 698px;
+$bazzel-width: 336px;
+$screen-height: 534px;
+$screen-width: 300px;
+$charger-height: 600px;
+$charger-width: 600px;
+$battery-height: 100px;
+$battery-width: 50px;
+$battery-charging-height: 48px;
+$battery-charging-width: 70px;
+$header-height: 36px;
+$header-width: 128px;
+$home-height: 46px;
+$home-width: 46px;
+$charging-animate: 9.2s;
+
+// mixin
+@mixin center{
+  display: flex;
+  justify-content: center;
+}
+@mixin pseudo($position: absolute, $content: ""){
+    content: $content;
+    position: $position;
+}
+@mixin reset{
+  *{
+    &,
+    &::before,
+    &::after {
+      box-sizing: border-box;
+      display: block;
+    }
+  }
+  z-index: 1;
+  position: relative;
+}
+@mixin wire($width, $height, $margin){
+  width: $width;
+  height: $height;
+  background: $charger-color;
+  margin: $margin;
+  box-shadow: inset 0px 5px 5px $wire-shadow-color, inset 0px -5px 5px $wire-shadow-color;
+  border-top-right-radius: 50%;
+  border-bottom-right-radius: 50%;
+  border-top: 0.5px solid $black-color;
+  border-bottom: 0.5px solid $black-color;
+}
+@mixin button($height, $width){
+  background: $iphone8-color-dark;
+  height: $height;
+  width: $width;
+}
+@mixin sensors($height, $width, $left, $top, $margin){
+  height: $height;
+  width: $width;
+  left: $left;
+  top: $top;
+  margin: $margin;
+}
+
+// keyframes
+@keyframes charging {
+  from {
+    width: 0px;
+  }
+
+  to {
+    width: 98px;
+  }
+}
+
+/*------------------------------------------------*/
+
+body{
+  @include center;
+  background: $bg-color;
+  overflow-x: hidden;
+  padding-top: $body-padding;
+}
+
+.charger{
+  @include center;
+  width: $charger-height;
+  height: $charger-height;
+  background: $charger-color;
+  border-radius: 50%;
+  margin-top: 100px;
+  position: absolute;
+  border: 8px solid $charger-border-color;
+
+  &::before{
+    @include pseudo;
+    height: 400px;
+    width: 400px;
+    border-radius: 50%;
+    border: 1px solid $charger-inside-color;
+    margin-top: 100px;
+  }
+
+  &::after{
+    @include pseudo;
+    height: 590px;
+    width: 590px;
+    border-radius: 50%;
+    border: 1px solid $charger-line-color;
+    margin-top: 1px;
+  }
+
+  .wire{
+     @include wire(15px, 45px, 280px 0 0 6px);
+     position: absolute;
+     left: 600px;
+
+     &::after{
+      @include pseudo;
+      @include wire(750px, 22.5px, 12px 0 0 15px);
+     }
+  }
+}
+
+.iphone-8 {
+  @include reset;
+  height: $iphone8-height;
+  width: $iphone8-width;
+  margin-top: $iphone8-margin;
+
+  .bazzel {
+    height: $bazzel-height;
+    width: $bazzel-width;
+    background: $bazzel-color;
+    border-radius: 54px;
+    box-shadow: inset 0 0 0 2px $iphone8-color-dark, inset 0 0 0 6px $iphone8-color;
+    padding: 82px 18px;
+  }
+
+  .screen {
+    @include center;
+    height: $screen-height;
+    width: $screen-width;
+    background-color: $screen-color;
+    background-position: center center;
+    background-size: cover;
+    border: 2px solid $screen-border-color;
+    border-radius: 4px;
+    position: relative;
+
+    .battery{
+      width: $battery-height;
+      height: $battery-width;
+      margin-top: 80%;
+      border: 1px solid white;
+
+      // charging
+      &::before{
+        height: 48px;
+        width: 70px;
+        @include pseudo;
+        background: $battery-color;
+        animation-duration: $charging-animate;
+        animation-name: charging;
+        animation-iteration-count: infinite;
+      }
+
+      &::after{
+        @include pseudo;
+        height: 15px;
+        width: 5px;
+        background: white;
+        margin-left: 100px;
+        margin-top: 15px;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+      }
+    }
+  }
+
+  .line {
+    &::after,
+    &::before {
+      @include pseudo;
+      border: solid rgba(#333, .15);
+      border-width: 0 6px;
+      height: 5px;
+      left: 0;
+      width: 100%;
+      z-index: 9;
+    }
+    &::after {
+      top: 55px;
+    }
+    &::before {
+      bottom: 55px;
+    }
+  }
+
+  .header {
+    height: $header-height;
+    width: $header-width;
+    left: 50%;
+    margin-left: -64px;
+    position: absolute;
+    top: 26px;
+    z-index: 199;
+
+    &::after {
+      @include pseudo;
+      height: 5px;
+      width: 60px;
+      background: $header-color;
+      border-radius: 2.5px;
+      left: 50%;
+      margin-left: -30px;
+      margin-top: -2.5px;
+      top: 50%;
+    }
+  }
+
+  .sensors {
+    &::after,
+    &::before {
+      @include pseudo;
+      background: $header-color;
+      border-radius: 50%;
+    }
+    &::after {
+      @include sensors(8px, 8px, 50%, 0, -4px 0 0 -4px);
+    }
+    &::before {
+      @include sensors(10px, 10px, 0, 50%, -5px 0 0 0);
+    }
+  }
+
+  .volume {
+    left: -2px;
+    top: 82px;
+    position: absolute;
+    @include button(24px, 3px);
+
+    &::after,
+    &::before {
+      left: 0;
+      @include pseudo;
+      @include button(45px, 3px);
+    }
+
+    &::after {
+      top: 50px;
+    }
+    &::before {
+      top: 106px;
+    }
+  }
+
+  .power {
+    right: -2px;
+    top: 160px;
+    position: absolute;
+    @include button(80px, 3px);
+  }
+
+  .home {
+    height: $home-height;
+    width: $home-width;
+    border-radius: 50%;
+    margin-left: -23px;
+    left: 50%;
+    bottom: 20px;
+    position: absolute;
+    border: 2px solid $iphone8-color-dark;
+  }
+}
